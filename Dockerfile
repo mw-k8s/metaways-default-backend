@@ -37,4 +37,6 @@ COPY --from=builder /go/src/k8s.io/ingress-nginx/images/custom-error-pages/www /
 COPY --from=builder /go/src/k8s.io/ingress-nginx/images/custom-error-pages/etc /etc
 USER nonroot:nonroot
 
+LABEL org.opencontainers.image.source = "https://github.com/mw-k8s/metaways-default-backend"
+
 CMD ["/nginx-errors"]
