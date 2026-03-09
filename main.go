@@ -25,7 +25,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const (
@@ -95,7 +94,6 @@ func errorHandler(path, defaultFormat string) func(http.ResponseWriter, *http.Re
 	defaultExt := defaultExts[0]
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
 		ext := defaultExt
 
 		if os.Getenv("DEBUG") != "" {
@@ -170,12 +168,7 @@ func errorHandler(path, defaultFormat string) func(http.ResponseWriter, *http.Re
 		w.WriteHeader(code)
 		io.Copy(w, f)
 
-		duration := time.Since(start).Seconds()
-
 		proto := strconv.Itoa(r.ProtoMajor)
 		proto = fmt.Sprintf("%s.%s", proto, strconv.Itoa(r.ProtoMinor))
-
-		requestCount.WithLabelValues(proto).Inc()
-		requestDuration.WithLabelValues(proto).Observe(duration)
 	}
 }
