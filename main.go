@@ -70,11 +70,6 @@ const (
 	DefaultFormatVar = "DEFAULT_RESPONSE_FORMAT"
 )
 
-func init() {
-	prometheus.MustRegister(requestCount)
-	prometheus.MustRegister(requestDuration)
-}
-
 func main() {
 	errFilesPath := "/www"
 	if os.Getenv(ErrFilesPathVar) != "" {
@@ -87,8 +82,6 @@ func main() {
 	}
 
 	http.HandleFunc("/", errorHandler(errFilesPath, defaultFormat))
-
-	http.Handle("/metrics", promhttp.Handler())
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
